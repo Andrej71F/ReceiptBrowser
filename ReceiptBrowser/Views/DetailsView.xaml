@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="ReceiptBrowser.Views.DetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <StackPanel Margin="5">
+        <TextBlock Text="{Binding Receipt.ReferenceId}" />
+        <TextBlock Text="{Binding Receipt.TotalAmount}" />
+        <TextBlock Text="{Binding Receipt.CardType}" />
+    </StackPanel>
+</UserControl>
