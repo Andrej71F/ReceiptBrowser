@@ -1,7 +1,8 @@
-﻿using System.Windows;
-using Prism.Ioc;
+﻿using Prism.Ioc;
+using Prism.Regions;
 using ReceiptBrowser.ViewModels;
 using ReceiptBrowser.Views;
+using System.Windows;
 
 namespace ReceiptBrowser
 {
@@ -17,6 +18,14 @@ namespace ReceiptBrowser
             return Container.Resolve<MainWindow>();
         }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            var rm = Container.Resolve<IRegionManager>();
+            rm.RequestNavigate("MainRegion", nameof(ReceiptBrowserView));
+        }
+
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IReceiptApi, ReceiptApiStub>();
@@ -24,7 +33,8 @@ namespace ReceiptBrowser
             containerRegistry.RegisterSingleton<FilterViewModel>();
             containerRegistry.RegisterSingleton<TableViewModel>();
             containerRegistry.RegisterSingleton<DetailsViewModel>();
-            containerRegistry.RegisterSingleton<ReceiptBrowserViewModel>();
+
+            containerRegistry.RegisterForNavigation<ReceiptBrowserView>();
         }
 
         #endregion Protected Methods

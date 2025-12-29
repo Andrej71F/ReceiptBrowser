@@ -22,18 +22,14 @@ namespace ReceiptBrowser.Views
     /// </summary>
     public partial class ReceiptBrowserView : UserControl
     {
-        #region Protected Methods
+        //protected override void OnInitialized(System.EventArgs e)
+        //{
+        //    base.OnInitialized(e);
 
-        protected override void OnInitialized(System.EventArgs e)
-        {
-            base.OnInitialized(e);
+        //    var container = ContainerLocator.Container;
 
-            var container = ContainerLocator.Container;
-
-            DataContext = container.Resolve<ReceiptBrowserViewModel>();
-        }
-
-        #endregion Protected Methods
+        //    DataContext = container.Resolve<ReceiptBrowserViewModel>();
+        //}
 
         #region Public Constructors
 
