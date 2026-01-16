@@ -22,15 +22,6 @@ namespace ReceiptBrowser.Views
     /// </summary>
     public partial class ReceiptBrowserView : UserControl
     {
-        //protected override void OnInitialized(System.EventArgs e)
-        //{
-        //    base.OnInitialized(e);
-
-        //    var container = ContainerLocator.Container;
-
-        //    DataContext = container.Resolve<ReceiptBrowserViewModel>();
-        //}
-
         #region Public Constructors
 
         public ReceiptBrowserView()

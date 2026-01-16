@@ -1,16 +1,22 @@
-﻿using Prism.Ioc;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace ReceiptBrowser.ViewModels
 {
-    public class ReceiptBrowserViewModel : BindableBase
+    public interface IReceiptBrowserCoordinator
+    {
+        #region Public Methods
+
+        void RouteFromChild(string from, object payload);
+
+        #endregion Public Methods
+    }
+
+    public class ReceiptBrowserViewModel : BindableBase, IReceiptBrowserCoordinator, IDisposable
     {
         #region Private Fields
-
-        private readonly IContainerProvider _container;
 
         private FilterViewModel _filterVM;
 
@@ -36,53 +42,54 @@ namespace ReceiptBrowser.ViewModels
 
         #region Public Constructors
 
-        public ReceiptBrowserViewModel(IContainerProvider container)
+        public ReceiptBrowserViewModel(IReceiptApi receiptApi)
         {
-            _container = container;
+            _filterVM = new FilterViewModel(receiptApi);
+            _tableVM = new TableViewModel();
+            _detailsVM = new DetailsViewModel();
+
+            _filterVM.ReceiptsLoaded += OnReceiptsLoaded;
+            _tableVM.ReceiptSelected += OnReceiptSelected;
         }
 
         #endregion Public Constructors
 
         #region Public Properties
 
-        public FilterViewModel FilterVM
-        {
-            get
-            {
-                if (_filterVM == null)
-                {
-                    _filterVM = _container.Resolve<FilterViewModel>();
-                    _filterVM.ReceiptsLoaded += OnReceiptsLoaded;
-                }
-                return _filterVM;
-            }
-        }
+        // публичные свойства для привязки в View
+        public FilterViewModel FilterVM => _filterVM;
 
-        public TableViewModel TableVM
-        {
-            get
-            {
-                if (_tableVM == null)
-                {
-                    _tableVM = _container.Resolve<TableViewModel>();
-                    _tableVM.ReceiptSelected += OnReceiptSelected;
-                }
-                return _tableVM;
-            }
-        }
+        public TableViewModel TableVM => _tableVM;
 
-        public DetailsViewModel DetailsVM
-        {
-            get
-            {
-                if (_detailsVM == null)
-                {
-                    _detailsVM = _container.Resolve<DetailsViewModel>();
-                }
-                return _detailsVM;
-            }
-        }
+        public DetailsViewModel DetailsVM => _detailsVM;
 
         #endregion Public Properties
+
+        #region Public Methods
+
+        public void RouteFromChild(string from, object payload)
+        {
+            if (from == nameof(FilterViewModel))
+            {
+                if (payload is IEnumerable<Receipt> receipts)
+                    TableVM.Receipts = new ObservableCollection<Receipt>(receipts);
+            }
+        }
+
+        // очистка подписок и ресурсов
+        public void Dispose()
+        {
+            if (_filterVM != null)
+                _filterVM.ReceiptsLoaded -= OnReceiptsLoaded;
+            if (_tableVM != null)
+                _tableVM.ReceiptSelected -= OnReceiptSelected;
+
+            // если у детей есть Dispose — вызываем
+            (_filterVM as IDisposable)?.Dispose();
+            (_tableVM as IDisposable)?.Dispose();
+            (_detailsVM as IDisposable)?.Dispose();
+        }
+
+        #endregion Public Methods
     }
 }

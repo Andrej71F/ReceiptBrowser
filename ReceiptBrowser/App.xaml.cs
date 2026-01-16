@@ -29,11 +29,6 @@ namespace ReceiptBrowser
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IReceiptApi, ReceiptApiStub>();
-
-            containerRegistry.RegisterSingleton<FilterViewModel>();
-            containerRegistry.RegisterSingleton<TableViewModel>();
-            containerRegistry.RegisterSingleton<DetailsViewModel>();
-
             containerRegistry.RegisterForNavigation<ReceiptBrowserView>();
         }
 
