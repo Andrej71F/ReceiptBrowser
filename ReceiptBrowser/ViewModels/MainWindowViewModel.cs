@@ -12,9 +12,8 @@ namespace ReceiptBrowser.ViewModels
 
         #region Public Constructors
 
-        public MainWindowViewModel(ReceiptBrowserViewModel browserVM)
+        public MainWindowViewModel()
         {
-            BrowserVM = browserVM;
         }
 
         #endregion Public Constructors
@@ -26,8 +25,6 @@ namespace ReceiptBrowser.ViewModels
             get => _title;
             set => SetProperty(ref _title, value);
         }
-
-        public ReceiptBrowserViewModel BrowserVM { get; }
 
         #endregion Public Properties
     }
